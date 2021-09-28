@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Retorfit &amp; Room</string>
+    <string name="click_to_see_images">Click on the buttons to view amazing pictures from NASA</string>
+    <string name="button1">1</string>
+    <string name="button2">2</string>
+    <string name="button3">3</string>
+    <string name="button4">4</string>
+    <string name="title">Title</string>
+    <string name="more_details">Click here for more details</string>
+    <string name="description">Description</string>
+</resources>
