@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Nasa.class}, version = 1, exportSchema = false)
+@Database(entities = {Nasa.class}, version = 2, exportSchema = false)
 public abstract class NasaRoomDatabase extends RoomDatabase {
 
     private static NasaRoomDatabase instance;
@@ -58,6 +58,7 @@ public abstract class NasaRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            nasaDao.deleteAll();
             return null;
         }
     }

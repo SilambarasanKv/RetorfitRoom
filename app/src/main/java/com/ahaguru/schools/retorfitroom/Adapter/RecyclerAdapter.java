@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,9 +60,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         holder.more.setOnClickListener(v -> {
 
-
-
             AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+            final ScrollView myScroll = new ScrollView(context);
             View view = LayoutInflater.from(context).inflate(R.layout.details_nasa,null);
 
             TextView dialogTitle, dialogUrl, dialogDescription;
@@ -86,7 +86,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             });
             dialogDescription.setText(nasa.getExplanation());
 
-            builder.setView(view);
+            myScroll.addView(view);
+            builder.setView(myScroll);
 
             builder.setNegativeButton("back", new DialogInterface.OnClickListener() {
                 @Override

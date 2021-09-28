@@ -46,9 +46,9 @@ public class NasaRepository {
 
         new InsertAsynTask(nasaRoomDatabase).execute(nasaList);
 
-        NasaRoomDatabase.executorService.execute(() -> {
-            nasaRoomDatabase.nasaDao().insert(nasaList);
-        });
+//        NasaRoomDatabase.executorService.execute(() -> {
+//            nasaRoomDatabase.nasaDao().insert(nasaList);
+//        });
     }
 
     public LiveData<List<Nasa>> getAllNasaDatas() {
@@ -71,14 +71,15 @@ public class NasaRepository {
 
     static class InsertAsynTask extends AsyncTask<List<Nasa>,Void,Void>{
         private NasaDao nasaDao;
+
         InsertAsynTask(NasaRoomDatabase nasaRoomDatabase)
         {
-            nasaDao=nasaRoomDatabase.nasaDao();
+            nasaDao = nasaRoomDatabase.nasaDao();
 
         }
         @Override
         protected Void doInBackground(List<Nasa>... lists) {
-            nasaDao.deleteAll();
+//            nasaDao.deleteAll();
             nasaDao.insert(lists[0]);
             return null;
         }
@@ -96,6 +97,7 @@ public class NasaRepository {
                 {
 
                     insert(response.body());
+                    Log.d("main", "onResponse: "+response.body());
 
                 }
             }
