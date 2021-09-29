@@ -22,6 +22,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +36,7 @@ public class NasaRepository {
     public String apikey="goLj8jNbuSbNDt3IRwbLGyModq3yUWPKob5zzao7";
     private LiveData<List<Nasa>> getAllNasaDatas;
     private NasaRoomDatabase nasaRoomDatabase;
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public NasaRepository(Application application) {
 
@@ -44,11 +48,13 @@ public class NasaRepository {
 
     public void insert(List<Nasa> nasaList) {
 
-        new InsertAsynTask(nasaRoomDatabase).execute(nasaList);
+        getLists(nasaList);
 
 //        NasaRoomDatabase.executorService.execute(() -> {
 //            nasaRoomDatabase.nasaDao().insert(nasaList);
 //        });
+
+        
     }
 
     public LiveData<List<Nasa>> getAllNasaDatas() {
@@ -57,33 +63,16 @@ public class NasaRepository {
 
     }
 
-//    static class InsertExecutor {
-//
-//        private NasaDao nasaDao;
-//
-//        private PopulateExecutor(NasaRoomDatabase db) {
-//            nasaDao = db.nasaDao();
-//
-//            executorService.shutdown();
-//        }
-//    }
-
-
-    static class InsertAsynTask extends AsyncTask<List<Nasa>,Void,Void>{
-        private NasaDao nasaDao;
-
-        InsertAsynTask(NasaRoomDatabase nasaRoomDatabase)
-        {
-            nasaDao = nasaRoomDatabase.nasaDao();
-
-        }
-        @Override
-        protected Void doInBackground(List<Nasa>... lists) {
-//            nasaDao.deleteAll();
-            nasaDao.insert(lists[0]);
-            return null;
-        }
+    public void getLists(final List<Nasa> lists) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                nasaRoomDatabase.nasaDao().insert(lists);
+            }
+        });
     }
+
+
 
     public void apiRequest(String count) {
 
