@@ -95,28 +95,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 count="1";
                 mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "First data inserted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "One new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn2:
 
-                count="1";
+                count="2";
                 mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Second data inserted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Two new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn3:
 
-                count="1";
+                count="3";
                 mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Third data inserted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Three new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn4:
 
-                count="1";
+                count="4";
                 mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Fourth data inserted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Four new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
 

@@ -50,11 +50,6 @@ public class NasaRepository {
 
         getLists(nasaList);
 
-//        NasaRoomDatabase.executorService.execute(() -> {
-//            nasaRoomDatabase.nasaDao().insert(nasaList);
-//        });
-
-        
     }
 
     public LiveData<List<Nasa>> getAllNasaDatas() {
