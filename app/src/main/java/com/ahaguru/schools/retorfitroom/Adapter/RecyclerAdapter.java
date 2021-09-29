@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ahaguru.schools.retorfitroom.DiffUtils.MyDiffUtils;
 import com.ahaguru.schools.retorfitroom.Entity.Nasa;
 import com.ahaguru.schools.retorfitroom.R;
+import com.ahaguru.schools.retorfitroom.databinding.ItemsNasaBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         // Inflate Layout
         return new MyViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.items_nasa,parent,false));
+
+
     }
 
     @Override

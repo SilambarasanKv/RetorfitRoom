@@ -26,6 +26,7 @@ import com.ahaguru.schools.retorfitroom.R;
 import com.ahaguru.schools.retorfitroom.Repository.NasaRepository;
 import com.ahaguru.schools.retorfitroom.Retrofit.RetrofitClient;
 import com.ahaguru.schools.retorfitroom.Service.RetrofitService;
+import com.ahaguru.schools.retorfitroom.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,29 +39,28 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView title, url;
-    RetrofitService service;
     Button button1, button2, button3, button4;
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     NasaRepository nasaRepository;
     MainViewModel mainViewModel;
     List<Nasa> nasaList;
+    ActivityMainBinding binding;
     public String count = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
+        button1 = binding.btn1;
+        button2 = binding.btn2;
+        button3 = binding.btn3;
+        button4 = binding.btn4;
+        recyclerView = binding.recyclerView;
 
-        title = findViewById(R.id.itemTitle);
-        url = findViewById(R.id.itemUrl);
-        button1 = findViewById(R.id.btn1);
-        button2 = findViewById(R.id.btn2);
-        button3 = findViewById(R.id.btn3);
-        button4 = findViewById(R.id.btn4);
-        recyclerView = findViewById(R.id.recyclerView);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
