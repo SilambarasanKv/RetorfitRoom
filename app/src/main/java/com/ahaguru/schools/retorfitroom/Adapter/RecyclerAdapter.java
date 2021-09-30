@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     List<Nasa> nasaList;
     private Context context;
 
-    public RecyclerAdapter(List<Nasa> nasaList, Context context) {
-        this.nasaList =nasaList;
+    public RecyclerAdapter(Context context) {
         this.context = context;
     }
 
@@ -42,68 +42,69 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate Layout
-        return new MyViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.items_nasa,parent,false));
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.items_nasa,parent,false);
+        final MyViewHolder myViewHolder = new MyViewHolder(v);
+        final Nasa nasa = nasaList.get(viewType);
 
+        myViewHolder.url.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(nasa.getUrl()));
+                context.startActivity(browserIntent);
+            }
+        });
 
+        myViewHolder.more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View view = LayoutInflater.from(context).inflate(R.layout.details_nasa, null);
+
+                TextView tvTitle = (TextView) view.findViewById(R.id.detailTitle);
+                tvTitle.setText(nasa.getTitle());
+                TextView tvUrl = (TextView) view.findViewById(R.id.detailUrl);
+                tvUrl.setText(nasa.getUrl());
+                tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
+                tvUrl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                        browserIntent.setData(Uri.parse(nasa.getUrl()));
+                        context.startActivity(browserIntent);
+                    }
+                });
+                TextView tvexplan = (TextView) view.findViewById(R.id.detailDescription);
+                tvexplan.setText(nasa.getExplanation());
+                tvexplan.setMovementMethod(new ScrollingMovementMethod());
+
+                builder.setView(view);
+
+                builder.setNegativeButton("back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                Window window = alertDialog.getWindow();
+                window.setLayout(RecyclerView.LayoutParams.FILL_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+
+            }
+        });
+        return myViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerAdapter.MyViewHolder holder, int position) {
-        Nasa nasa = nasaList.get(position);
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        final Nasa nasa = nasaList.get(position);
 
         holder.title.setText(nasa.getTitle());
         holder.url.setText(nasa.getUrl());
 
-        holder.url.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-            browserIntent.setData(Uri.parse(nasa.getUrl()));
-            context.startActivity(browserIntent);
-        });
-
-        holder.more.setOnClickListener(v -> {
-
-            AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-            final ScrollView myScroll = new ScrollView(context);
-            View view = LayoutInflater.from(context).inflate(R.layout.details_nasa,null);
-
-            TextView dialogTitle, dialogUrl, dialogDescription;
-
-            dialogTitle = view.findViewById(R.id.detailTitle);
-            dialogUrl = view.findViewById(R.id.detailUrl);
-            dialogDescription = view.findViewById(R.id.detailDescription);
-
-            dialogTitle.setText(nasa.getTitle());
-
-            dialogUrl.setClickable(true);
-            dialogUrl.setText(nasa.getUrl());
-            dialogUrl.setMovementMethod(LinkMovementMethod.getInstance());
-
-            dialogUrl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                    browserIntent.setData(Uri.parse(nasa.getUrl()));
-                    context.startActivity(browserIntent);
-                }
-            });
-            dialogDescription.setText(nasa.getExplanation());
-
-            myScroll.addView(view);
-            builder.setView(myScroll);
-
-            builder.setNegativeButton("back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            final AlertDialog alertDialog=builder.create();
-            alertDialog.show();
-            Window window = alertDialog.getWindow();
-            window.setLayout(RecyclerView.LayoutParams.FILL_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-        });
     }
 
     @Override
@@ -117,7 +118,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, url;
         Button more;
@@ -129,14 +130,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             url = itemView.findViewById(R.id.itemUrl);
             more = itemView.findViewById(R.id.btnMore);
         }
-    }
-
-    public void insertdata(List<Nasa> insertList){
-
-        MyDiffUtils diffUtilCallback = new MyDiffUtils(nasaList,insertList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
-        nasaList.addAll(insertList);
-        diffResult.dispatchUpdatesTo(this);
     }
 
     public void updateList(List<Nasa> newList){

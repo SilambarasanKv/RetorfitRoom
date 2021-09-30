@@ -27,6 +27,7 @@ import com.ahaguru.schools.retorfitroom.Repository.NasaRepository;
 import com.ahaguru.schools.retorfitroom.Retrofit.RetrofitClient;
 import com.ahaguru.schools.retorfitroom.Service.RetrofitService;
 import com.ahaguru.schools.retorfitroom.databinding.ActivityMainBinding;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,10 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button button1, button2, button3, button4;
     RecyclerView recyclerView;
+    MaterialTextView tvTextView;
     RecyclerAdapter recyclerAdapter;
-    NasaRepository nasaRepository;
     MainViewModel mainViewModel;
-    List<Nasa> nasaList;
     ActivityMainBinding binding;
     public String count = "";
 
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button3 = binding.btn3;
         button4 = binding.btn4;
         recyclerView = binding.recyclerView;
+        tvTextView = binding.tvTextView;
 
 
         button1.setOnClickListener(this);
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerAdapter = new RecyclerAdapter(nasaList, this);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerAdapter = new RecyclerAdapter(this);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerAdapter.getAllNasaDatas(nasaList);
                 recyclerAdapter.updateList(nasaList);
+
             }
         });
 
@@ -92,34 +95,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn1:
 
                 count="1";
-                mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "One new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn2:
 
                 count="2";
-                mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Two new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn3:
 
                 count="3";
-                mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Three new data inserted", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn4:
 
                 count="4";
-                mainViewModel.retrofitCall(count);
-                Toast.makeText(MainActivity.this, "Four new data inserted", Toast.LENGTH_SHORT).show();
                 break;
-
-
         }
 
+        Button button = (Button) v;
+        String count = button.getText().toString();
+        mainViewModel.retrofitCall(count);
     }
 
 }

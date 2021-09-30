@@ -7,13 +7,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
+    private static RetrofitClient retrofitClient;
+    private static Retrofit retrofit;
     private static final String BASE_URL = "https://api.nasa.gov/planetary/";
 
-    Retrofit retrofit = new retrofit2.Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
 
-    public RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+    public RetrofitClient(){
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+    public static RetrofitClient getInstance(){
+        if(retrofitClient == null){
+            retrofitClient = new RetrofitClient();
+        }
+        return retrofitClient;
+    }
 
+    public RetrofitService retrofitService(){
+        return retrofit.create(RetrofitService.class);
+    }
 }

@@ -14,60 +14,33 @@ import com.ahaguru.schools.retorfitroom.Entity.Nasa;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Nasa.class}, version = 3, exportSchema = false)
 public abstract class NasaRoomDatabase extends RoomDatabase {
 
-    private static NasaRoomDatabase instance;
+    private static volatile NasaRoomDatabase INSTANCE;
 
     public abstract NasaDao nasaDao();
 
-    private static final ExecutorService service = Executors.newSingleThreadExecutor();
+    public Executor executor = Executors.newSingleThreadExecutor();
 
-    public static synchronized NasaRoomDatabase getInstance(Context context) {
-
-        if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                    NasaRoomDatabase.class, "nasa_database")
-                    .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
-                    .build();
-        }
-        return instance;
-
-    }
-
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-
-        NasaDao nasaDao;
-
-        @Override
-        public void onCreate(@NotNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            new PopulateExecutor(instance);
-
-        }
-    };
-
-    private static class PopulateExecutor {
-        private NasaDao nasaDao;
-
-        private PopulateExecutor(NasaRoomDatabase db) {
-            nasaDao = db.nasaDao();
-
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    nasaDao.deleteAll();
+    public static NasaRoomDatabase getInstance(Context context){
+        if(INSTANCE == null)
+        {
+            synchronized (NasaRoomDatabase.class){
+                if(INSTANCE == null)
+                {
+                    INSTANCE= Room.databaseBuilder(context,NasaRoomDatabase.class,
+                            "nasa_database")
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
-            });
+            }
         }
+        return INSTANCE;
     }
-
-
 
 }

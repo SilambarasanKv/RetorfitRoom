@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,14 +38,12 @@ public class NasaRepository {
     public String apikey="goLj8jNbuSbNDt3IRwbLGyModq3yUWPKob5zzao7";
     private LiveData<List<Nasa>> getAllNasaDatas;
     private NasaRoomDatabase nasaRoomDatabase;
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    public Context context;
+    private MutableLiveData<String> toastMessageObserver = new MutableLiveData();
 
     public NasaRepository(Application application) {
 
         nasaRoomDatabase = NasaRoomDatabase.getInstance(application);
-        getAllNasaDatas = nasaRoomDatabase.nasaDao().getAllNasaDatas();
-
-
     }
 
     public void insert(List<Nasa> nasaList) {
@@ -53,15 +53,17 @@ public class NasaRepository {
     }
 
     public LiveData<List<Nasa>> getAllNasaDatas() {
-
+        getAllNasaDatas = nasaRoomDatabase.nasaDao().getAllNasaDatas();
         return getAllNasaDatas;
 
     }
 
     public void getLists(final List<Nasa> lists) {
-        executorService.execute(new Runnable() {
+
+        nasaRoomDatabase.executor.execute(new Runnable() {
             @Override
             public void run() {
+
                 nasaRoomDatabase.nasaDao().insert(lists);
             }
         });
@@ -71,8 +73,7 @@ public class NasaRepository {
 
     public void apiRequest(String count) {
 
-        RetrofitClient retrofitClient = new RetrofitClient();
-        Call<List<Nasa>> call =  retrofitClient.retrofitService.getAllNasaDatas(apikey, count);
+        Call<List<Nasa>> call =  RetrofitClient.getInstance().retrofitService().getAllNasaDatas(apikey, count);
         call.enqueue(new Callback<List<Nasa>>() {
 
             @Override
@@ -81,15 +82,18 @@ public class NasaRepository {
                 {
 
                     insert(response.body());
-//                    Log.d("main", "onResponse: "+response.body());
+                    Log.d("main", "onResponse: "+response.body());
+                    toastMessageObserver.setValue("Successfully inserted datas"+ response.message());
 
+                }
+                else {
+                    response.code();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Nasa>> call, Throwable t) {
-
-                System.out.println(t);
+                Log.d("main", "Failed");
             }
         });
 
