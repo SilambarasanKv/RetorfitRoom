@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class Nasa {
 
     @PrimaryKey(autoGenerate = true)
-    private Integer id;
+    private int id;
 
     @SerializedName("explanation")
     @ColumnInfo(name = "explanation")
@@ -30,7 +30,7 @@ public class Nasa {
         this.url = url;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

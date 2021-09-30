@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="15dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/detailTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/detailUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detailTitle" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/detailDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

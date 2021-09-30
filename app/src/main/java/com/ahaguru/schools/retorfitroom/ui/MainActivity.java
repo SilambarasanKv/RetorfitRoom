@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        nasaRepository = new NasaRepository(getApplication());
-        nasaList = new ArrayList<>();
         recyclerAdapter = new RecyclerAdapter(nasaList, this);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);

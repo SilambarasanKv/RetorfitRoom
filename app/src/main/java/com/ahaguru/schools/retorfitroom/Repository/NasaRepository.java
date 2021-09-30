@@ -81,7 +81,7 @@ public class NasaRepository {
                 {
 
                     insert(response.body());
-                    Log.d("main", "onResponse: "+response.body());
+//                    Log.d("main", "onResponse: "+response.body());
 
                 }
             }

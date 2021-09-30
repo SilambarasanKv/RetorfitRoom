@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Nasa.class}, version = 2, exportSchema = false)
+@Database(entities = {Nasa.class}, version = 3, exportSchema = false)
 public abstract class NasaRoomDatabase extends RoomDatabase {
 
     private static NasaRoomDatabase instance;
